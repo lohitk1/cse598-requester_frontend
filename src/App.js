@@ -6,6 +6,7 @@ const App = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [token, setToken] = useState("");
     const [labeledCount, setLabeledCount] = useState(0);
+    const [tokens, setTokens] = useState([]);
 
     useEffect(() => {
         fetchImages();
@@ -38,7 +39,9 @@ const App = () => {
         setLabeledCount(newLabeledCount);
 
         if (newLabeledCount === 10) {
-            setToken(generateToken());
+            const newToken = generateToken();
+            setTokens([...tokens, newToken]);
+            setLabeledCount(0); // Reset labeled count after generating a token
         }
 
         if (currentIndex === images.length - 1) {
@@ -67,7 +70,14 @@ const App = () => {
                 <p className="text-center">No images available</p>
             )}
 
-            {token && labeledCount === 10 && <p className="text-green-500 text-center mt-4">You've earned a token: {token}</p>}
+            {tokens.length > 0 && (
+                <div className="text-green-500 text-center mt-4">
+                    <p>You've earned tokens:</p>
+                    {tokens.map((t, index) => (
+                        <p key={index}>{t}</p>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
