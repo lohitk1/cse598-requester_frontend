@@ -67,7 +67,7 @@ const App = () => {
                     </button>
                 </div>
             ) : (
-                <p className="text-center">No images available</p>
+                <p className="text-center">Please wait for the backend to load (1 min). I didn't pay for hosting :(</p>
             )}
 
             {tokens.length > 0 && (
