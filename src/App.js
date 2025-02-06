@@ -11,7 +11,9 @@ const App = () => {
     }, []);
 
     const fetchImages = async () => {
-        const response = await axios.get("http://127.0.0.1:8000/api/images/get_images/");
+        const response = await axios.get("https://cse598-requester.onrender.com/api/images/get_images/");
+        // Log the number of images returned
+        console.log(`Number of images returned: ${response.data.images.length}`);
         setImages(response.data.images);
         setCurrentIndex(0);
     };
@@ -22,7 +24,7 @@ const App = () => {
         const imageUrl = images[currentIndex];
         const imageName = imageUrl.split("/").pop(); // Extract filename from URL
 
-        const response = await axios.post("http://127.0.0.1:8000/api/images/submit_label/", {
+        const response = await axios.post("https://cse598-requester.onrender.com/api/images/submit_label/", {
             image_name: imageName,
             label
         });
@@ -44,7 +46,7 @@ const App = () => {
 
             {images.length > 0 && currentIndex < images.length ? (
                 <div className="text-center">
-                    <img src={`http://127.0.0.1:8000${images[currentIndex]}`} alt="Label" className="w-full h-64 object-cover mb-4" />
+                    <img src={`https://cse598-requester.onrender.com${images[currentIndex]}`} alt="Label" className="w-full h-64 object-cover mb-4" />
                     <p className="text-gray-600">Label this image:</p>
                     <button className="bg-green-500 text-white px-4 py-2 mx-2" onClick={() => handleLabel("Real")}>
                         Real

@@ -5,7 +5,7 @@ import axios from "axios";
 const Auth = ({ setUser }) => {
     const handleSuccess = async (credentialResponse) => {
         const { credential } = credentialResponse;
-        const response = await axios.post("http://127.0.0.1:8000/api/auth/social/login/", { token: credential });
+        const response = await axios.post("https://cse598-requester.onrender.com/api/auth/social/login/", { token: credential });
         setUser(response.data.user);
     };
 
