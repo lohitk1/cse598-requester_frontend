@@ -19,13 +19,17 @@ const App = () => {
         setLabeledCount(0); // Reset labeled count when fetching new images
     };
 
+    const generateToken = () => {
+        return `TOKEN_${Math.floor(1000 + Math.random() * 9000)}`;
+    };
+
     const handleLabel = async (label) => {
         if (currentIndex >= images.length) return;
 
         const imageUrl = images[currentIndex];
         const imageName = imageUrl.split("/").pop();
 
-        const response = await axios.post("https://cse598-requester.onrender.com/api/images/submit_label/", {
+        await axios.post("https://cse598-requester.onrender.com/api/images/submit_label/", {
             image_name: imageName,
             label
         });
@@ -33,8 +37,8 @@ const App = () => {
         const newLabeledCount = labeledCount + 1;
         setLabeledCount(newLabeledCount);
 
-        if (newLabeledCount === 10 && response.data.token) {
-            setToken(response.data.token);
+        if (newLabeledCount === 10) {
+            setToken(generateToken());
         }
 
         if (currentIndex === images.length - 1) {
@@ -50,7 +54,7 @@ const App = () => {
 
             {images.length > 0 && currentIndex < images.length ? (
                 <div className="text-center">
-                    <img src={`https://cse598-requester.onrender.com${images[currentIndex]}`} alt="Label" className="w-full h-[30vh] object-cover mb-4" />
+                    <img src={`https://cse598-requester.onrender.com${images[currentIndex]}`} alt="Label" className="w-full h-[30vh] object-cover mb-4" style={{ maxWidth: '100%', height: '30vh', objectFit: 'cover' }} />
                     <p className="text-gray-600">Label this image:</p>
                     <button className="bg-green-500 text-white px-4 py-2 mx-2" onClick={() => handleLabel("Real")}>
                         Real
