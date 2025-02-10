@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./App.css";
 
 const App = () => {
     const [images, setImages] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [token, setToken] = useState("");
-    const [labeledCount, setLabeledCount] = useState(0);
     const [tokens, setTokens] = useState([]);
+    const [labeledCount, setLabeledCount] = useState(0);
 
     useEffect(() => {
         fetchImages();
@@ -14,7 +14,6 @@ const App = () => {
 
     const fetchImages = async () => {
         const response = await axios.get("https://cse598-requester.onrender.com/api/images/get_images/");
-        console.log(`Number of images returned: ${response.data.images.length}`);
         setImages(response.data.images);
         setCurrentIndex(0);
         setLabeledCount(0); // Reset labeled count when fetching new images
@@ -41,7 +40,7 @@ const App = () => {
         if (newLabeledCount === 10) {
             const newToken = generateToken();
             setTokens([...tokens, newToken]);
-            setLabeledCount(0); // Reset labeled count after generating a token
+            setLabeledCount(0); // Reset progress bar after generating a token
         }
 
         if (currentIndex === images.length - 1) {
@@ -52,27 +51,44 @@ const App = () => {
     };
 
     return (
-        <div className="p-4 max-w-lg mx-auto">
-            <h1 className="text-xl font-bold text-center">Label Images</h1>
+        <div className="container">
+            {/* Instruction Box */}
+            <div className="instruction-box">
+                <h2>Welcome to Image Labeling</h2>
+                <p>Help us classify images by selecting whether they are AI-generated or real. For every 10 images you label, you earn a token.</p>
+                <p>Your contributions improve AI accuracy!</p>
+            </div>
 
+            {/* Image Display */}
             {images.length > 0 && currentIndex < images.length ? (
-                <div className="text-center">
-                    <img src={`https://cse598-requester.onrender.com${images[currentIndex]}`} alt="Label" className="w-full h-[30vh] object-cover mb-4" style={{ maxWidth: '100%', height: '30vh', objectFit: 'cover' }} />
-                    <p className="text-gray-600">Label this image:</p>
-                    <button className="bg-green-500 text-white px-4 py-2 mx-2" onClick={() => handleLabel("Real")}>
-                        Real
-                    </button>
-                    <button className="bg-red-500 text-white px-4 py-2" onClick={() => handleLabel("AI")}>
-                        AI
-                    </button>
+                <div>
+                    <div className="image-container">
+                        <img src={`https://cse598-requester.onrender.com${images[currentIndex]}`} alt="Label this" />
+                    </div>
+
+                    <p className="instructions">Is this a real photo or AI-generated?</p>
+
+                    {/* Centered Buttons */}
+                    <div className="button-container">
+                        <button className="real-button" onClick={() => handleLabel("Real")}>Real</button>
+                        <button className="ai-button" onClick={() => handleLabel("AI")}>AI</button>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="progress-bar-container">
+                        <div className="progress-bar" style={{ width: `${(labeledCount / 10) * 100}%` }}></div>
+                    </div>
+
+                    <p className="progress-text">{labeledCount}/10 images labeled until next token</p>
                 </div>
             ) : (
-                <p className="text-center">Please wait for the backend to load (1 min). I didn't pay for hosting :(</p>
+                <p className="loading-message">Please wait for the backend to load (1 min). Thanks for your patience!</p>
             )}
 
+            {/* Token Display */}
             {tokens.length > 0 && (
-                <div className="text-green-500 text-center mt-4">
-                    <p>You've earned tokens:</p>
+                <div className="token-container">
+                    <p>🎉 You've earned tokens:</p>
                     {tokens.map((t, index) => (
                         <p key={index}>{t}</p>
                     ))}
