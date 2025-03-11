@@ -142,9 +142,10 @@ const App = () => {
                                         <button className="override-button" onClick={() => handleAIOverride(false)}>
                                             ✅ Stick with my choice ({userChoice})
                                         </button>
+                                        {/* Opposite of ai choice */}
                                         <button className="override-button" onClick={() => handleAIOverride(true)}>
-                                            🔄 Change my choice
-                                        </button>
+                                            🔄 Change my choice ({aiPrediction.label === "AI" ? "Real" : "AI"})
+                                        </button> 
                                     </>
                                 ) : (
                                     <>
